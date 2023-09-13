@@ -28,8 +28,12 @@ class ServeHandler {
 
       var usuario = json['usuario'];
       var senha = json['senha'];
+
       if (usuario == 'admin' && senha == '123') {
-        return Response.ok('Bem vindo $usuario');
+        Map result = {'token': 'token123', 'user_id': 1};
+        String jsonResponse = jsonEncode(result);
+
+        return Response.ok(jsonResponse, headers: {'content-type': 'application/json'}); // devolvendo um json como resposta
       } else {
         return Response.forbidden('Acesso negado');
       }
