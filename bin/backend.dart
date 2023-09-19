@@ -1,12 +1,12 @@
 import 'package:shelf/shelf.dart';
 
-import 'api/blog_api.dart';
+import 'api/news_api.dart';
 import 'api/login_api.dart';
 import 'infra/custom_server.dart';
+import 'services/news_service.dart';
 import 'utils/custom_env.dart';
 
 void main() async {
-  
   CustomEnv.fromFile('.env-dev');
 
   var cascadeHandler = Cascade()
@@ -14,7 +14,7 @@ void main() async {
         LoginApi().handler,
       )
       .add(
-        BlogApi().handler,
+        NewsApi(NewsService()).handler,
       )
       .handler;
 
