@@ -1,8 +1,9 @@
 import '../model/news_model.dart';
 import 'generic_service.dart';
+import '../utils/list_extension.dart';
 
 class NewsService implements GenericService<NewsModel> {
-  List<NewsModel> _fakeDB = [];
+  final List<NewsModel> _fakeDB = [];
 
   @override
   bool delete(int id) {
@@ -22,12 +23,17 @@ class NewsService implements GenericService<NewsModel> {
 
   @override
   bool save(NewsModel value) {
-    _fakeDB.firstWhere(
+    NewsModel? model = _fakeDB.firstWhereOrNull(
       (e) => e.id == value.id,
-      orElse: () => value,
     );
 
-    // _fakeDB.
+    if (model == null) { //se NULO, novo objeto
+      _fakeDB.add(value);
+
+    }else{
+      var index =_fakeDB.indexOf(model); // se nao NULO, atualiza o objeto
+      _fakeDB[index] = value;
+    }
     return true;
   }
 }
