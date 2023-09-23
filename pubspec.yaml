@@ -10,6 +10,7 @@ dependencies:
   args: ^2.4.2
   shelf: ^1.4.1
   shelf_router: ^1.1.4
+  dart_jsonwebtoken: 2.11.0
 
 dev_dependencies:
   http: ^0.13.6
