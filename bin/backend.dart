@@ -11,17 +11,14 @@ void main() async {
   CustomEnv.fromFile('.env-dev');
 
   var cascadeHandler = Cascade()
-      .add(
-        LoginApi(SecurityServiceImp()).handler,
-      )
-      .add(
-        NewsApi(NewsService()).handler,
-      )
+      .add(LoginApi(SecurityServiceImp()).handler)
+      .add(NewsApi(NewsService()).handler)
       .handler;
 
   var handler = Pipeline()
       .addMiddleware(logRequests())
       .addMiddleware(MiddlewareInterception().middleware)
+      .addMiddleware(SecurityServiceImp().authorization)
       .addHandler(cascadeHandler);
 
   await CustomServer().initialize(

@@ -15,7 +15,7 @@ class SecurityServiceImp implements SecurityService<JWT> {
     });
 
     String key = await CustomEnv.get(key: 'jwt_key');
-    String token = jwt.sign(SecretKey('chave'));
+    String token = jwt.sign(SecretKey(key));
     return token;
   }
 
@@ -31,28 +31,31 @@ class SecurityServiceImp implements SecurityService<JWT> {
       return null;
     } on JWTNotActiveException {
       return null;
+    } on JWTUndefinedException {
+      return null;
     } catch (e) {
       return null;
     }
   }
 
   @override
-  // TODO: implement authorization
   Middleware get authorization {
     return (Handler handler) {
-      return (Request req) {
-        var authorizationHeader = req.headers['authorization'];
+      return (Request req) async {
+        String? authorizationHeader = req.headers['Authorization'];
+
+        JWT? jwt;
 
         if (authorizationHeader != null) {
           if (authorizationHeader.startsWith('Bearer ')) {
             String token = authorizationHeader.substring(7);
-            
+            jwt = await validateJWT(token);
           }
         }
 
+        var request = req.change(context: {'jwt': jwt} );
 
-
-        return handler(req);
+        return handler(request);
       };
     };
   }
