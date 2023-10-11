@@ -53,7 +53,7 @@ class SecurityServiceImp implements SecurityService<JWT> {
           }
         }
 
-        var request = req.change(context: {'jwt': jwt} );
+        var request = req.change(context: {'jwt': jwt});
 
         return handler(request);
       };
@@ -61,6 +61,12 @@ class SecurityServiceImp implements SecurityService<JWT> {
   }
 
   @override
-  // TODO: implement verifyJwt
-  Middleware get verifyJwt => throw UnimplementedError();
+  Middleware get verifyJwt => createMiddleware(
+        requestHandler: (Request req) {
+          if (req.context['jwt'] == null) {
+            return Response.forbidden('Nao autorizado');
+          }
+          return null;
+        },
+      );
 }
