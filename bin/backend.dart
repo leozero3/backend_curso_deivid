@@ -14,7 +14,7 @@ void main() async {
   SecurityService _securityService = SecurityServiceImp();
 
   var cascadeHandler = Cascade()
-      .add(LoginApi(_securityService).handler)
+      .add(LoginApi(_securityService).getHandler(middlewares: []))
       .add(NewsApi(NewsService()).handler)
       .handler;
 
