@@ -6,13 +6,15 @@ import 'package:shelf_router/shelf_router.dart';
 import '../model/news_model.dart';
 import '../services/generic_service.dart';
 import '../services/news_service.dart';
+import 'api.dart';
 
-class NewsApi {
+class NewsApi extends Api {
   final GenericService<NewsModel> _service;
 
   NewsApi(this._service);
 
-  Handler get handler {
+  @override
+  Handler getHandler({List<Middleware>? middlewares}) {
     Router router = Router();
 //
 
@@ -41,6 +43,6 @@ class NewsApi {
       return Response.ok('Choveu hoje');
     });
 
-    return router;
+    return createHandler(router: router, middlewares: middlewares);
   }
 }
