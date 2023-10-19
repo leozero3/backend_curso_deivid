@@ -16,6 +16,12 @@ class DependencyInjector {
   }
 
   //get
+
+  T get<T extends Object>() {
+    final instance = _instanceMap[T]?.getInstance();
+    if (instance != null && instance is T) return instance;
+    throw Exception('[ERROR] -> Instance ${T.toString()} not found');
+  }
 }
 
 class _InstanceGenerator<T> {
