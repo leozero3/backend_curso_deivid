@@ -14,13 +14,7 @@ void main() async {
   SecurityService _securityService = SecurityServiceImp();
 
   var cascadeHandler = Cascade()
-      .add(LoginApi(_securityService).getHandler(middlewares: [
-        createMiddleware(
-          requestHandler: (Request req) {
-            print('LOG -> ${req.url}');
-          },
-        )
-      ]))
+      .add(LoginApi(_securityService).getHandler())
       .add(NewsApi(NewsService()).getHandler(
         middlewares: [
           _securityService.authorization,
@@ -32,8 +26,6 @@ void main() async {
   var handler = Pipeline()
       .addMiddleware(logRequests())
       .addMiddleware(MiddlewareInterception().middleware)
-      // .addMiddleware(_securityService.authorization)
-      // .addMiddleware(_securityService.verifyJwt)
       .addHandler(cascadeHandler);
 
   await CustomServer().initialize(
