@@ -2,21 +2,17 @@ import 'package:shelf/shelf.dart';
 import 'api/news_api.dart';
 import 'api/login_api.dart';
 import 'infra/custom_server.dart';
-import 'infra/dependency_injector/dependency_injector.dart';
 import 'infra/dependency_injector/injects.dart';
 import 'infra/middleware_interception.dart';
-import 'infra/security/security_service.dart';
-import 'infra/security/security_service_imp.dart';
-import 'services/news_service.dart';
 import 'utils/custom_env.dart';
 
 void main() async {
   CustomEnv.fromFile('.env-dev');
 
-  var di = Injects.initialize();
+  var _di = Injects.initialize();
   var cascadeHandler = Cascade()
-      .add(LoginApi(_securityService).getHandler())
-      .add(NewsApi(NewsService()).getHandler(isSecurity: true))
+      .add(_di.get<LoginApi>().getHandler())
+      .add(_di.get<NewsApi>().getHandler(isSecurity: true))
       .handler;
 
   var handler = Pipeline()
