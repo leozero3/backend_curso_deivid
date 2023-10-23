@@ -11,7 +11,7 @@ class DependencyInjector {
 
   //register
   void register<T extends Object>(InstanceCreator<T> instance,
-      {bool isSingleton = false}) {
+      {bool isSingleton = true}) {
     _instanceMap[T] = _InstanceGenerator(instance, isSingleton);
   }
 

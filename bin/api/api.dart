@@ -9,7 +9,7 @@ abstract class Api {
   Handler createHandler({
     required Handler router,
     List<Middleware>? middlewares,
-    bool isSecurity = false,
+    bool isSecurity = true,
   }) {
     middlewares ??= [];
 
