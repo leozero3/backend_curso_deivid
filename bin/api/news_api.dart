@@ -5,7 +5,6 @@ import 'package:shelf_router/shelf_router.dart';
 
 import '../model/news_model.dart';
 import '../services/generic_service.dart';
-import '../services/news_service.dart';
 import 'api.dart';
 
 class NewsApi extends Api {
@@ -14,7 +13,10 @@ class NewsApi extends Api {
   NewsApi(this._service);
 
   @override
-  Handler getHandler({List<Middleware>? middlewares}) {
+  Handler getHandler({
+    List<Middleware>? middlewares,
+    bool isSecurity = false,
+  }) {
     Router router = Router();
 //
 
@@ -43,6 +45,7 @@ class NewsApi extends Api {
       return Response.ok('Choveu hoje');
     });
 
-    return createHandler(router: router, middlewares: middlewares);
+    return createHandler(
+        router: router, isSecurity: isSecurity, middlewares: middlewares);
   }
 }
