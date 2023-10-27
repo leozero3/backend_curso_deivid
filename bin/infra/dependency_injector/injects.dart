@@ -15,16 +15,12 @@ class Injects {
       () => SecurityServiceImp(),
     );
 
-    di.register<LoginApi>(
-      () => LoginApi(di()),
-    );
+    di.register<LoginApi>(() => LoginApi(di<SecurityService>()));
     di.register<GenericService<NewsModel>>(
       () => NewsService(),
     );
 
-    di.register<NewsApi>(
-      () => NewsApi(di()),
-    );
+    di.register<NewsApi>(() => NewsApi(di<GenericService<NewsModel>>()));
 
     return di;
   }
