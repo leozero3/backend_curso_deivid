@@ -5,3 +5,5 @@ volumes/
 .volumes/mysql
 .env
 .env-dev
+env
+env-dev
