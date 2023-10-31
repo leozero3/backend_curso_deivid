@@ -39,6 +39,9 @@ class UsuarioDAO implements DAO<UsuarioModel> {
     var connection = await _dbConfiguration.connection;
     var result = await connection.query(SQL, [id]);
 
+    if (result.length <= 0)
+      throw Exception('[ERROR/DB] -> findOne for id: $id, Not Found');
+
     return UsuarioModel.fromMap(result.first.fields);
   }
 
