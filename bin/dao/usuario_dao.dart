@@ -9,14 +9,27 @@ class UsuarioDAO implements DAO<UsuarioModel> {
 
   @override
   Future create(UsuarioModel value) async {
-    // TODO: implement create
-    throw UnimplementedError();
+    final String SQL =
+        'INSERT INTO usuarios (nome, email, password) VALUES (?, ?, ?)';
+
+    var connection = await _dbConfiguration.connection;
+    var result = await connection.query(SQL, [
+      value.name,
+      value.email,
+      value.password,
+    ]);
+    return result.result.affectedRows > 0;
   }
 
   @override
-  Future delete(UsuarioModel value) async {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future delete(int id) async {
+    final String SQL = 'DELETE from usuarios where id = ?;';
+
+    var connection = await _dbConfiguration.connection;
+    var result = await connection.query(SQL, [
+      id,
+    ]);
+    return result.result.affectedRows > 0;
   }
 
   @override
@@ -47,7 +60,15 @@ class UsuarioDAO implements DAO<UsuarioModel> {
 
   @override
   Future update(UsuarioModel value) async {
-    // TODO: implement update
-    throw UnimplementedError();
+    final String SQL =
+        'UPDATE usuarios set nome = ?, password = ? where id = ?';
+
+    var connection = await _dbConfiguration.connection;
+    var result = await connection.query(SQL, [
+      value.name,
+      value.password,
+      value.id,
+    ]);
+    return result.affectedRows > 0;
   }
 }

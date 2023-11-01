@@ -1,17 +1,26 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class UsuarioModel {
-  final int id;
-  final String name;
-  final String email;
-  final bool isActived;
-  final DateTime dtCreated;
-  final DateTime dtUpdate;
+  int? id;
+  String? name;
+  String? password;
+  String? email;
+  bool? isActived;
+  DateTime? dtCreated;
+  DateTime? dtUpdate;
 
-  UsuarioModel(this.id, this.name, this.email, this.isActived, this.dtCreated,
-      this.dtUpdate);
+  UsuarioModel();
+
+  UsuarioModel.create(
+    this.id,
+    this.name,
+    this.email,
+    this.isActived,
+    this.dtCreated,
+    this.dtUpdate,
+  );
 
   factory UsuarioModel.fromMap(Map<String, dynamic> map) {
-    return UsuarioModel(
+    return UsuarioModel.create(
       map['id'] as int,
       map['nome'] as String,
       map['email'] as String,

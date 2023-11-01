@@ -5,5 +5,5 @@ abstract class DAO<T> {
   Future<T> findOne(int id);
   Future<List<T>> findAll();
   Future update(T value);
-  Future delete(T value);
+  Future delete(int id);
 }
