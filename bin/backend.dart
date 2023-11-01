@@ -16,16 +16,18 @@ void main() async {
   UsuarioDAO _usuarioDAO = UsuarioDAO(_di<DbConfiguration>());
 
   var usuario = UsuarioModel()
-    ..id = 4
-    ..name = 'XPTO1'
+    ..id = 5
+    ..name = 'novo'
     ..email = 'email@email.com'
     ..password = '123';
 
+  _usuarioDAO.findAll().then(print);
+  // _usuarioDAO.findOne(4).then(print);
   // _usuarioDAO.create(usuario).then(print);
-  // _usuarioDAO.delete(usuario.id!.toInt()).then(print);
+  // usuario.name = 'ATUALIZADO';
   // _usuarioDAO.update(usuario).then(print);
-  // _usuarioDAO.findOne(13).then(print);
-  print(await _usuarioDAO.findOne(4));
+  // _usuarioDAO.delete(5).then(print);
+  // print(await _usuarioDAO.findOne(4));
 
   var cascadeHandler = Cascade()
       .add(_di.get<LoginApi>().getHandler())

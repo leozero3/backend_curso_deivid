@@ -8,67 +8,53 @@ class UsuarioDAO implements DAO<UsuarioModel> {
   UsuarioDAO(this._dbConfiguration);
 
   @override
-  Future create(UsuarioModel value) async {
-    final String SQL =
-        'INSERT INTO usuarios (nome, email, password) VALUES (?, ?, ?)';
-
-    var connection = await _dbConfiguration.connection;
-    var result = await connection.query(SQL, [
-      value.name,
-      value.email,
-      value.password,
-    ]);
-    return result.result.affectedRows > 0;
+  Future<bool> create(UsuarioModel value) async {
+    var result = await _execQuery(
+      'INSERT INTO usuarios (nome, email, password) VALUES (?, ?, ?)',
+      [value.name, value.email, value.password],
+    );
+    return result.affectedRows > 0;
   }
 
   @override
-  Future delete(int id) async {
-    final String SQL = 'DELETE from usuarios where id = ?;';
-
-    var connection = await _dbConfiguration.connection;
-    var result = await connection.query(SQL, [
+  Future<bool> delete(int id) async {
+    var result = await _execQuery('DELETE from usuarios where id = ?', [
       id,
     ]);
-    return result.result.affectedRows > 0;
+    return result.affectedRows > 0;
   }
 
   @override
   Future<List<UsuarioModel>> findAll() async {
-    final String SQL = 'SELECT * FROM usuarios';
-    var connection = await _dbConfiguration.connection;
-    var result = await connection.query(SQL);
-
-    List<UsuarioModel> _usuario = [];
-    for (var r in result) {
-      _usuario.add(UsuarioModel.fromMap(r.fields));
-    }
-    return _usuario;
+    var result = await _execQuery('SELECT * FROM usuarios');
+    return result
+        .map((r) => UsuarioModel.fromMap(r.fields))
+        .toList()
+        .cast<UsuarioModel>();
   }
 
   @override
-  Future<UsuarioModel> findOne(int id) async {
-    final String SQL = 'SELECT * FROM usuarios where id = ?';
+  Future<UsuarioModel?> findOne(int id) async {
+    var result = await _execQuery('SELECT * FROM usuarios where id = ?', [id]);
 
-    var connection = await _dbConfiguration.connection;
-    var result = await connection.query(SQL, [id]);
-
-    if (result.length <= 0)
-      throw Exception('[ERROR/DB] -> findOne for id: $id, Not Found');
-
-    return UsuarioModel.fromMap(result.first.fields);
+    return result.affectedRows == 0
+        ? null
+        : UsuarioModel.fromMap(result.first.fields);
   }
 
   @override
-  Future update(UsuarioModel value) async {
-    final String SQL =
-        'UPDATE usuarios set nome = ?, password = ? where id = ?';
-
-    var connection = await _dbConfiguration.connection;
-    var result = await connection.query(SQL, [
+  Future<bool> update(UsuarioModel value) async {
+    var result = await _execQuery(
+        'UPDATE usuarios set nome = ?, password = ? where id = ?', [
       value.name,
       value.password,
       value.id,
     ]);
     return result.affectedRows > 0;
+  }
+
+  _execQuery(String sql, [List? params]) async {
+    var connection = await _dbConfiguration.connection;
+    return await connection.query(sql, params);
   }
 }
