@@ -20,8 +20,8 @@ class NewsApi extends Api {
     Router router = Router();
 //
 
-    router.get('/blog/news', (Request req) {
-      List<NewsModel> news = _service.findAll();
+    router.get('/blog/news', (Request req) async {
+      List<NewsModel> news = await _service.findAll();
       List<Map> newsMap = news.map((e) => e.toJson()).toList();
       return Response.ok(jsonEncode(newsMap),
           headers: {'content-type': 'application/json'});

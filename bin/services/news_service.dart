@@ -6,32 +6,32 @@ class NewsService implements GenericService<NewsModel> {
   final List<NewsModel> _fakeDB = [];
 
   @override
-  bool delete(int id) {
+  Future<bool> delete(int id) async {
     _fakeDB.removeWhere((e) => e.id == id);
     return true;
   }
 
   @override
-  List<NewsModel> findAll() {
+  Future<List<NewsModel>> findAll() async {
     return _fakeDB;
   }
 
   @override
-  NewsModel findOne(int id) {
+  Future<NewsModel?> findOne(int id) async {
     return _fakeDB.firstWhere((e) => e.id == id);
   }
 
   @override
-  bool save(NewsModel value) {
+  Future<bool> save(NewsModel value) async {
     NewsModel? model = _fakeDB.firstWhereOrNull(
       (e) => e.id == value.id,
     );
 
-    if (model == null) { //se NULO, novo objeto
+    if (model == null) {
+      //se NULO, novo objeto
       _fakeDB.add(value);
-
-    }else{
-      var index =_fakeDB.indexOf(model); // se nao NULO, atualiza o objeto
+    } else {
+      var index = _fakeDB.indexOf(model); // se nao NULO, atualiza o objeto
       _fakeDB[index] = value;
     }
     return true;
