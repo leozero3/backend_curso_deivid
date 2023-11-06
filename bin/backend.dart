@@ -1,4 +1,3 @@
-import 'package:password_dart/password_dart.dart';
 import 'package:shelf/shelf.dart';
 import 'api/news_api.dart';
 import 'api/login_api.dart';
