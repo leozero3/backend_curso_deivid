@@ -19,7 +19,8 @@ class NewsModel {
 
   factory NewsModel.fromRequest(Map map) {
     return NewsModel()
-      ..title = ['title'] as String?
+      ..id = map['id']?.toInt()
+      ..title = map['title']
       ..description = map['description']
       ..userId = map['userId']?.toInt();
   }

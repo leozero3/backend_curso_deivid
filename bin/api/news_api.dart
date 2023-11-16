@@ -21,6 +21,17 @@ class NewsApi extends Api {
 //
 
     router.get('/news', (Request req) async {
+      String? id = req.url.queryParameters['id'];
+      if (id == null) return Response(400);
+      var news = await _service.findOne(int.parse(id));
+
+      if (news == null) return Response(400);
+
+      // List<Map> newsMap = news.map((e) => e.toJson()).toList();
+      return Response.ok(jsonEncode(news.toJson()));
+    });
+
+    router.get('/news/all', (Request req) async {
       List<NewsModel> news = await _service.findAll();
       List<Map> newsMap = news.map((e) => e.toJson()).toList();
       return Response.ok(jsonEncode(newsMap));
@@ -32,16 +43,19 @@ class NewsApi extends Api {
       return result ? Response(201) : Response(500);
     });
 
-    router.put('/news', (Request req) {
-      String? id = req.url.queryParameters['id'];
-      // _service.save('');
-      return Response.ok('Choveu hoje');
+    router.put('/news', (Request req) async {
+      var body = await req.readAsString();
+      var result = await _service.save(NewsModel.fromRequest(jsonDecode(body)));
+      return result ? Response(200) : Response(500);
     });
 
-    router.delete('/news', (Request req) {
+    router.delete('/news', (Request req) async {
       String? id = req.url.queryParameters['id'];
-      // _service.delete(1);
-      return Response.ok('Choveu hoje');
+      if (id == null) {
+        return Response(400);
+      }
+      var result = await _service.delete(int.parse(id));
+      return result ? Response(200) : Response.internalServerError();
     });
 
     return createHandler(
